@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href = "styleu3.css">
+  <title></title>
+</head>
+<body onload ="intro()">
+
+  <div class = "holder">
+    <div class = "sideDiv">
+      <div class = "topChunk">
+        Player One
+      </div>
+      <div id = "p0">
+      </div>
+    </div>
+    <div class = "midDiv">
+      <div  class = cardRow>
+        <div id = "d0">
+        </div>
+        <div id = "d1">
+        </div>
+        <div id = "d2">
+        </div>
+        <div id = "d3">
+        </div>
+
+      </div>
+
+      <div  class = cardRow>
+        <div id = "d4">
+        </div>
+        <div id = "d5">
+        </div>
+        <div id = "d6">
+        </div>
+        <div id = "d7">
+        </div>
+      </div>
+
+      <div  class = cardRow>
+        <div id = "d8">
+        </div>
+        <div id = "d9">
+        </div>
+        <div id = "d10">
+        </div>
+        <div id = "d11">
+        </div>
+      </div>
+      <div  class = cardRow>
+        <div id = "d12">
+        </div>
+        <div id = "d13">
+        </div>
+        <div id = "d14">
+        </div>
+        <div id = "d15">
+        </div>
+      </div>
+
+    </div>
+    <div class = "sideDiv">
+      <div class = "topChunk">
+        Player Two
+
+      </div>
+      <div id = "p1">
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <script type="text/javascript">
+  /* FOR TESTING: set vis to 1*/
+  var vis = 0;
+
+  var match = 0;
+  var boxes =[16];
+  var states =[16];
+  var turn = 0;
+  var card1 = -1;
+  var card1loc = -1;
+  var card2 = -1;
+  var card2loc = -1;
+  var score =[0,0];
+  var pics= ["goldfish.svg","stripefish.svg","tropicalfish.svg","regularfish.svg","otherfish.svg","fancyfish.svg","clownfish.svg","greenfish.svg"];
+
+  var player = 0;
+
+  function intro(){
+    alert("Click to reveal the cards! Match two cards to get a point. The player with the most Points wins!")
+  }
+
+  (function makeBoxes() {
+    for(i = 0; i < 8; i++){
+      boxes[i] = Math.abs(7-i);
+    }
+    for(i = 0; i < 16; i++){
+      states[i] = 0;
+    }
+    for(i = 8; i < 16; i++){
+      boxes[i] = Math.abs(8-i);
+    }
+  })();
+
+  (function start() {
+  setTimeout(update(), 3000);
+  })();
+
+
+  var gameState = function(i){
+    if(i == card1loc && turn ==1 || states[i] == 2){
+      alert("Please Select a different card");
+    }
+    else{
+
+      if(turn == 0){
+        for(j = 0; j < 16; j++){
+          if(states[j] == 1){
+            states[j] = 0;
+          }
+        }
+        card1 = boxes[i];
+        card1loc = i;
+        turn = 1;
+      }
+      else if(turn == 1){
+        card2 = boxes[i];
+        card2loc = [i];
+        if(card1 == card2){
+          states[card1loc] = 2;
+          states[card2loc] = 2;
+          j = boxes[i];
+          document.getElementById('p'+ player).innerHTML += "<div> <th> <img class = 'contain' src= "+pics[j]+" style= 'width:100px; height:70px; border-radius: 30px; background:red';</th> </div>"
+          score[player] = score[player] + 1;
+          match++;
+          if(match == 8){
+            if(score[0]>score[1]){
+              alert(  "Game over. Player 1 wins!");
+            }
+            else if(score[0]<score[1]){
+              alert(  "Game over. Player 2 wins!");
+            }
+            else {
+              alert( "Game over. It's a tie!");
+            }
+          }
+        }
+
+        else{
+          if (player==0){
+            player = 1;
+          }
+          else{
+            player=0;
+          }
+        }
+        turn = 0;
+      }
+
+
+      if(states[i]!=2){
+        states[i]= 1;
+      }
+      update();
+
+    }
+  }
+
+  function update(){
+
+     if(vis == 0){
+        for(k = 0; k < 16; k++){
+          j = boxes[k];
+        if(states[k] == 0){
+          document.getElementById('d'+ k).innerHTML = "<div onclick= 'gameState("+k+");'> <th> <img class = 'contain' src= CardBack.svg style= 'width:100px; height:70px; border-radius: 30px; background:red';</th> </div>"
+        }
+        else{
+          document.getElementById('d'+ k).innerHTML = "<div onclick= 'gameState("+k+");'> <th> <img class = 'contain' src= "+pics[j]+" style= 'width:100px; height:70px; border-radius: 30px; background:red';</th> </div>"
+        }
+      }
+    }
+      else{
+        for(k = 0; k < 16; k++){
+          j = boxes[k];
+        document.getElementById('d'+ k).innerHTML = "<div onclick= 'gameState("+k+");'> <th> <img class = 'contain' src= "+pics[j]+" style= 'width:100px; height:70px; border-radius: 30px; background:red';</th> </div>"
+      }
+    }
+  }
+
+
+  </script>
+</body>
+</html>
